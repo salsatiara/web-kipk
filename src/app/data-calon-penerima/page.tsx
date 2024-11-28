@@ -13,7 +13,6 @@ import {
   BsPlusSlashMinus,
   BsTrash3,
 } from "react-icons/bs";
-import Select from "react-select/base";
 
 const option: {
   value: string;
