@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Alternatif {
+  id            Int      @id @default(autoincrement())
+  nisn          String
+  nama          String
+  penghasilan   Int
+  jmlTanggungan Int
+  nilai         Int
+  rumah         Int
+  listrik       Int
+}
+
+model Kriteria {
+  id             Int      @id @default(autoincrement())
+  kode           String
+  kriteria       String
+  rentang1       String
+  bobot1         Int
+  rentang2       String
+  bobot2         Int
+  rentang3       String
+  bobot3         Int
+  rentang4       String
+  bobot4         Int
+  rentang5       String
+  bobot5         Int
+}
