@@ -1,12 +1,13 @@
 "use client";
 
+import axios from "axios";
 import { Fade as Hamburger } from "hamburger-react";
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import {
   BsBook,
   BsBoxArrowRight,
   BsJournalText,
-  BsPencil,
   BsPencilSquare,
   BsPersonCircle,
   BsPlusLg,
@@ -25,12 +26,41 @@ const option: {
   { value: "100", label: "100" },
 ];
 
+type Data = {
+  status: string;
+  message: string;
+  data: {
+    id: number;
+    nisn: string;
+    nama: string;
+    penghasilan: number;
+    jmlTanggungan: number;
+    nilai: number;
+    rumah: string;
+    listrik: number;
+  }[];
+};
+
 export default function Form() {
   const [isOpen, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<{
     value: string;
     label: string;
   }>(option[0]);
+  const [data, setData] = useState<Data>();
+
+  async function fetchData() {
+    const response = await axios.get<Data>(
+      "http://localhost:3000/api/alternatif"
+    );
+    setData(response.data);
+    console.log(response.data);
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <>
       <div className="flex top-0 left-0 z-40 sticky bg-[#1684A7]">
@@ -73,7 +103,9 @@ export default function Form() {
               <p className="ml-2">Data Calon Penerima</p>
             </div>
             <div className="flex items-center">
-              <BsPlusLg size={24} color="#000" />
+              <Link href="/form-mahasiswa">
+                <BsPlusLg size={24} color="#000" />
+              </Link>
             </div>
           </div>
           <div className="mx-8 my-4 flex justify-between">
@@ -135,40 +167,42 @@ export default function Form() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
-                    1
-                  </td>
-                  <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
-                    0019102024
-                  </td>
-                  <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
-                    Desi Fakhriyyah Sinaga
-                  </td>
-                  <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
-                    Rp. 2.500.000
-                  </td>
-                  <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
-                    5 orang
-                  </td>
-                  <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
-                    95,50
-                  </td>
-                  <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
-                    Mengontrak, tidak punya kendaraan
-                  </td>
-                  <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
-                    900 VA
-                  </td>
-                  <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
-                    <button className="bg-[#F6EC72] text-black px-2 py-1 rounded">
-                      <BsPencilSquare size={14} />
-                    </button>
-                    <button className="bg-[#EB0707] text-black px-2 py-1 rounded">
-                      <BsTrash3 size={14} />
-                    </button>
-                  </td>
-                </tr>
+                {data?.data.map((item, index) => (
+                  <tr key={item.id}>
+                    <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
+                      {index + 1}
+                    </td>
+                    <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
+                      {item.nisn}
+                    </td>
+                    <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
+                      {item.nama}
+                    </td>
+                    <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
+                      Rp. {item.penghasilan}
+                    </td>
+                    <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
+                      {item.jmlTanggungan} orang
+                    </td>
+                    <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
+                      {item.nilai}
+                    </td>
+                    <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
+                      {item.rumah}
+                    </td>
+                    <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
+                      {item.listrik} VA
+                    </td>
+                    <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
+                      <button className="bg-[#F6EC72] text-black px-2 py-1 rounded">
+                        <BsPencilSquare size={14} />
+                      </button>
+                      <button className="bg-[#EB0707] text-black px-2 py-1 rounded">
+                        <BsTrash3 size={14} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
