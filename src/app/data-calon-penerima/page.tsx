@@ -1,19 +1,15 @@
 "use client";
 
+import Navbar from "@/components/Navbar";
+import listrikFormatter from "@/libs/listrikFormatter";
+import nilaiFormatter from "@/libs/nilaiFormatter";
+import penghasilanFormatter from "@/libs/penghasilanFormatter";
+import rumahFormatter from "@/libs/rumahFormatter";
+import tanggunganFormatter from "@/libs/tanggunganFormatter";
 import axios from "axios";
-import { Fade as Hamburger } from "hamburger-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import {
-  BsBook,
-  BsBoxArrowRight,
-  BsJournalText,
-  BsPencilSquare,
-  BsPersonCircle,
-  BsPlusLg,
-  BsPlusSlashMinus,
-  BsTrash3,
-} from "react-icons/bs";
+import { BsBook, BsPencilSquare, BsPlusLg, BsTrash3 } from "react-icons/bs";
 
 const option: {
   value: string;
@@ -36,17 +32,12 @@ type Data = {
     penghasilan: number;
     jmlTanggungan: number;
     nilai: number;
-    rumah: string;
+    rumah: number;
     listrik: number;
   }[];
 };
 
 export default function Form() {
-  const [isOpen, setOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<{
-    value: string;
-    label: string;
-  }>(option[0]);
   const [data, setData] = useState<Data>();
 
   async function fetchData() {
@@ -63,38 +54,7 @@ export default function Form() {
 
   return (
     <>
-      <div className="flex top-0 left-0 z-40 sticky bg-[#1684A7]">
-        <Hamburger toggled={isOpen} toggle={setOpen} size={18} color="#000" />
-        <div className="flex w-full justify-between items-center ml-4 mr-6 text-sm font-semibold">
-          <p className="text-black">KIP-Kuliah</p>
-          <BsPersonCircle size={24} color="#000" />
-        </div>
-      </div>
-      <div
-        className={`flex flex-col w-1/3 min-w-[1/3] max-w-56 top-12 left-0 fixed z-30 bg-[#CFE4EB] text-black duration-200 ${
-          isOpen ? "translate-x-0" : "-translate-x-60"
-        }`}
-      >
-        <div className="px-6 py-4 text-sm flex items-center border-b border-[#A3A3A3]">
-          <BsBook size={24} color="#000" />
-          <p className="ml-2">Data Calon Penerima</p>
-        </div>
-        <div className="px-6 py-4 text-sm flex items-center border-b border-[#A3A3A3]">
-          <BsJournalText size={24} color="#000" />
-          <p className="ml-2">Data Kriteria</p>
-        </div>
-        <div className="px-6 py-4 text-sm flex items-center border-b border-[#A3A3A3]">
-          <BsPlusSlashMinus
-            className="border-[1.7px] rounded border-black p-1 stroke-[1px]"
-            size={24}
-            color="#000"
-          />
-          <p className="ml-2">Perhitungan</p>
-        </div>
-        <div className="px-6 py-4 mt-10 ml-auto">
-          <BsBoxArrowRight size={24} />
-        </div>
-      </div>
+      <Navbar />
       <div className="bg-white h-screen w-full text-black flex flex-col">
         <div className="flex flex-col">
           <div className="flex justify-between px-4 py-2 bg-[#E6E6E6] rounded">
@@ -179,19 +139,19 @@ export default function Form() {
                       {item.nama}
                     </td>
                     <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
-                      Rp. {item.penghasilan}
+                      {penghasilanFormatter(item.penghasilan)}
                     </td>
                     <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
-                      {item.jmlTanggungan} orang
+                      {tanggunganFormatter(item.jmlTanggungan)}
                     </td>
                     <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
-                      {item.nilai}
+                      {nilaiFormatter(item.nilai)}
                     </td>
                     <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
-                      {item.rumah}
+                      {rumahFormatter(item.rumah)}
                     </td>
                     <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
-                      {item.listrik} VA
+                      {listrikFormatter(item.listrik)}
                     </td>
                     <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
                       <button className="bg-[#F6EC72] text-black px-2 py-1 rounded">
