@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { request } from "http";
 
 const prisma = new PrismaClient();
 
@@ -118,5 +117,12 @@ export async function POST(request: Request) {
         status: 200,
       }
     );
-  } catch (error) {}
+  } catch (error) {
+    if (error instanceof Error) {
+      return Response.json({
+        status: "Error",
+        error: error.message,
+      });
+    }
+  }
 }
