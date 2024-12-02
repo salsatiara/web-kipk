@@ -1,59 +1,57 @@
 "use client";
 
-import { Fade as Hamburger } from "hamburger-react";
-import { useState } from "react";
-import {
-  BsBook,
-  BsBoxArrowRight,
-  BsJournalText,
-  BsPersonCircle,
-  BsPlusSlashMinus,
-} from "react-icons/bs";
+import Navbar from "@/components/Navbar";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
 export default function Form() {
-  const [isOpen, setOpen] = useState(false);
+  const router = useRouter();
 
   const [nisn, setNisn] = useState("");
   const [nama, setNama] = useState("");
-  const [penghasilan, setPenghasilan] = useState("");
-  const [tanggungan, setTanggungan] = useState("");
-  const [nilai, setNilai] = useState("");
-  const [rumah, setRumah] = useState("");
-  const [listrik, setListrik] = useState("");
+  const [penghasilan, setPenghasilan] = useState("5");
+  const [tanggungan, setTanggungan] = useState("5");
+  const [nilai, setNilai] = useState("5");
+  const [rumah, setRumah] = useState("5");
+  const [listrik, setListrik] = useState("5");
+
+  async function tambahData(
+    e: FormEvent,
+    nisn: string,
+    nama: string,
+    penghasilan: string,
+    tanggungan: string,
+    nilai: string,
+    rumah: string,
+    listrik: string
+  ) {
+    try {
+      e.preventDefault();
+      await axios.post(
+        "/api/alternatif/tambah",
+        {
+          nisn: nisn,
+          nama: nama,
+          penghasilan: penghasilan,
+          jmlTanggungan: tanggungan,
+          nilai: nilai,
+          rumah: rumah,
+          listrik: listrik,
+        },
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      await router.push("/data-calon-penerima");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+      }
+    }
+  }
 
   return (
     <>
-      <div className="flex top-0 left-0 z-40 sticky bg-[#1684A7]">
-        <Hamburger toggled={isOpen} toggle={setOpen} size={18} color="#000" />
-        <div className="flex w-full justify-between items-center ml-4 mr-6 text-sm font-semibold">
-          <p className="text-black">KIP-Kuliah</p>
-          <BsPersonCircle size={24} color="#000" />
-        </div>
-      </div>
-      <div
-        className={`flex flex-col top-12 left-0 fixed z-30 bg-[#CFE4EB] text-black duration-200 ${
-          isOpen ? "translate-x-0" : "-translate-x-56"
-        }`}
-      >
-        <div className="px-6 py-4 text-sm flex items-center border-b border-[#A3A3A3]">
-          <BsBook size={24} color="#000" />
-          <p className="ml-2">Data Calon Penerima</p>
-        </div>
-        <div className="px-6 py-4 text-sm flex items-center border-b border-[#A3A3A3]">
-          <BsJournalText size={24} color="#000" />
-          <p className="ml-2">Data Kriteria</p>
-        </div>
-        <div className="px-6 py-4 text-sm flex items-center border-b border-[#A3A3A3]">
-          <BsPlusSlashMinus
-            className="border-[1.7px] rounded border-black p-1 stroke-[1px]"
-            size={24}
-            color="#000"
-          />
-          <p className="ml-2">Perhitungan</p>
-        </div>
-        <div className="px-6 py-4 mt-10 ml-auto">
-          <BsBoxArrowRight size={24} />
-        </div>
-      </div>
+      <Navbar />
       <div className="bg-white h-screen text-black flex flex-col items-center">
         <div className="lg:w-1/3 flex flex-col">
           <p className="text-[#1684A7] font-bold mt-8 text-center">
@@ -65,11 +63,13 @@ export default function Form() {
             <div className="flex flex-col mt-4 text-xs">
               <label htmlFor="nisn">NISN</label>
               <input
-                type="number"
+                type="text"
                 name="nisn"
                 id="nisn"
                 placeholder="0000000000"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={nisn}
+                onChange={(e) => setNisn(e.target.value.replace(/[^0-9]/g, ""))}
               />
             </div>
             <div className="flex flex-col mt-4 text-xs">
@@ -80,6 +80,8 @@ export default function Form() {
                 id="nama"
                 placeholder="Marselino Marselino"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={nama}
+                onChange={(e) => setNama(e.target.value)}
               />
             </div>
             <div className="flex flex-col mt-4 text-xs">
@@ -88,6 +90,8 @@ export default function Form() {
                 name="penghasilan"
                 id="penghasilan"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={penghasilan}
+                onChange={(e) => setPenghasilan(e.target.value)}
               >
                 <option value="1" className="bg-white">
                   ≥ Rp 5.000.001
@@ -112,6 +116,8 @@ export default function Form() {
                 name="tanggungan"
                 id="tanggungan"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={tanggungan}
+                onChange={(e) => setTanggungan(e.target.value)}
               >
                 <option value="1" className="bg-white">
                   1 Orang
@@ -136,6 +142,8 @@ export default function Form() {
                 name="nilai"
                 id="nilai"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={nilai}
+                onChange={(e) => setNilai(e.target.value)}
               >
                 <option value="1" className="bg-white">
                   &lt; 75
@@ -160,6 +168,8 @@ export default function Form() {
                 name="rumah"
                 id="rumah"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={rumah}
+                onChange={(e) => setRumah(e.target.value)}
               >
                 <option value="1" className="bg-white">
                   Rumah milik sendiri, punya mobil dan motor
@@ -184,12 +194,14 @@ export default function Form() {
                 name="listrik"
                 id="listrik"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={listrik}
+                onChange={(e) => setListrik(e.target.value)}
               >
                 <option value="1" className="bg-white">
                   &gt; 2200 VA
                 </option>
                 <option value="2" className="bg-white">
-                  2200VA
+                  2200 VA
                 </option>
                 <option value="3" className="bg-white">
                   1300 VA
@@ -203,7 +215,21 @@ export default function Form() {
               </select>
             </div>
             <div className="flex justify-evenly my-6 text-sm">
-              <button className="px-5 py-2 bg-[#09A599] text-white font-bold rounded">
+              <button
+                className="px-5 py-2 bg-[#09A599] text-white font-bold rounded"
+                onClick={(e) =>
+                  tambahData(
+                    e,
+                    nisn,
+                    nama,
+                    penghasilan,
+                    tanggungan,
+                    nilai,
+                    rumah,
+                    listrik
+                  )
+                }
+              >
                 Submit
               </button>
               <button className="px-5 py-2 bg-[#EB0707] text-white font-bold rounded">
