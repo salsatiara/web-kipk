@@ -16,5 +16,12 @@ export async function GET() {
         status: 200,
       }
     );
-  } catch (error) {}
+  } catch (error) {
+    if (error instanceof Error) {
+      return Response.json({
+        status: "Error",
+        error: error.message,
+      });
+    }
+  }
 }
