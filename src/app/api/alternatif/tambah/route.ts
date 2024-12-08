@@ -95,6 +95,24 @@ export async function POST(request: Request) {
       );
     }
 
+    const old = await prisma.alternatif.findMany({
+      where: {
+        nisn: nisn,
+      },
+    });
+
+    if (old.length > 0) {
+      return Response.json(
+        {
+          status: "error",
+          message: "nisn already exists",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
     const data = await prisma.alternatif.create({
       data: {
         nama: nama,
