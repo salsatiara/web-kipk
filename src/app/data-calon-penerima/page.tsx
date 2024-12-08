@@ -9,7 +9,14 @@ import tanggunganFormatter from "@/libs/tanggunganFormatter";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { BsBook, BsPencilSquare, BsPlusLg, BsTrash3 } from "react-icons/bs";
+import {
+  BsBook,
+  BsCheck2,
+  BsPencilSquare,
+  BsPlusLg,
+  BsTrash3,
+} from "react-icons/bs";
+import Modal from "react-modal";
 
 const option: {
   value: string;
@@ -21,6 +28,24 @@ const option: {
   { value: "50", label: "50" },
   { value: "100", label: "100" },
 ];
+
+const customStyles = {
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0)",
+  },
+  content: {
+    width: "25%",
+    height: "30%",
+    margin: "auto",
+    padding: "0rem",
+    backgroundColor: "rgba(163, 163, 163, 0.8)",
+    inset: "0",
+    border: "0",
+    borderRadius: "0.5rem",
+    boxShadow:
+      "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+  },
+};
 
 type Data = {
   status: string;
@@ -39,13 +64,39 @@ type Data = {
 
 export default function Form() {
   const [data, setData] = useState<Data>();
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [alertIsOpen, setAlertIsOpen] = useState(false);
+  const [dataid, setDataId] = useState<number>(0);
+
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
+
+  const openAlert = (id: number) => {
+    setDataId(id);
+    setAlertIsOpen(true);
+  };
+  const closeAlert = () => {
+    setDataId(0);
+    setAlertIsOpen(false);
+  };
 
   async function fetchData() {
-    const response = await axios.get<Data>(
-      "http://localhost:3000/api/alternatif"
-    );
+    const response = await axios.get<Data>("/api/alternatif");
     setData(response.data);
-    console.log(response.data);
+  }
+
+  async function handleDelete(id: number) {
+    await axios.delete(`/api/alternatif/hapus`, {
+      data: {
+        id: id,
+      },
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    fetchData();
+    closeAlert();
+    openModal();
   }
 
   useEffect(() => {
@@ -54,6 +105,55 @@ export default function Form() {
 
   return (
     <>
+      <Modal
+        isOpen={alertIsOpen}
+        onRequestClose={closeAlert}
+        style={customStyles}
+        ariaHideApp={false}
+      >
+        <div className="w-full h-full flex flex-col bg-[#A3A3A3] justify-center items-center gap-10 bg-opacity-0">
+          <p className="font-bold text-center w-5/6">
+            Are u sure you want to delete this data? This action cannot be
+            undone.
+          </p>
+          <div className="flex gap-12">
+            <button
+              className="bg-[#EB0707] text-white px-6 py-3 rounded-md"
+              onClick={() => handleDelete(dataid)}
+            >
+              Yes
+            </button>
+            <button
+              className="bg-[#F6EC72] text-black px-6 py-3 rounded-md"
+              onClick={closeAlert}
+            >
+              No
+            </button>
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        ariaHideApp={false}
+      >
+        <div className="w-full h-full flex flex-col bg-[#A3A3A3] justify-center items-center bg-opacity-0">
+          <div className="text-[#1684A7] bg-white rounded-full px-2 py-2 border border-[#1684A7] mb-6">
+            <BsCheck2 className="text-5xl stroke-[0px]" />
+          </div>
+          <p className="font-bold text-center w-5/6 text-xl mb-3">Success!</p>
+          <p className="font-bold text-center w-5/6 mb-2">
+            Data successfully deleted
+          </p>
+          <button
+            className="bg-[#1684A7] text-white px-6 py-2 rounded-md"
+            onClick={closeModal}
+          >
+            OK
+          </button>
+        </div>
+      </Modal>
       <Navbar />
       <div className="bg-white h-screen w-full text-black flex flex-col">
         <div className="flex flex-col">
@@ -63,7 +163,7 @@ export default function Form() {
               <p className="ml-2">Data Calon Penerima</p>
             </div>
             <div className="flex items-center">
-              <Link href="/form-mahasiswa">
+              <Link href="/form-mahasiswa?action=tambah">
                 <BsPlusLg size={24} color="#000" />
               </Link>
             </div>
@@ -153,11 +253,17 @@ export default function Form() {
                     <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
                       {listrikFormatter(item.listrik)}
                     </td>
-                    <td className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
-                      <button className="bg-[#F6EC72] text-black px-2 py-1 rounded">
+                    <td className="flex items-center border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center">
+                      <Link
+                        href={`/form-mahasiswa?id=${item.id}&nisn=${item.nisn}&nama=${item.nama}&penghasilan=${item.penghasilan}&tanggungan=${item.jmlTanggungan}&nilai=${item.nilai}&rumah=${item.rumah}&listrik=${item.listrik}&action=edit`}
+                        className="bg-[#F6EC72] text-black px-2 py-1 rounded inline-block"
+                      >
                         <BsPencilSquare size={14} />
-                      </button>
-                      <button className="bg-[#EB0707] text-black px-2 py-1 rounded">
+                      </Link>
+                      <button
+                        className="bg-[#EB0707] text-black px-2 py-1 rounded"
+                        onClick={() => openAlert(item.id)}
+                      >
                         <BsTrash3 size={14} />
                       </button>
                     </td>

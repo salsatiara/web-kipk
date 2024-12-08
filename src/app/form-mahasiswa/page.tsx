@@ -2,18 +2,26 @@
 
 import Navbar from "@/components/Navbar";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 export default function Form() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [nisn, setNisn] = useState("");
-  const [nama, setNama] = useState("");
-  const [penghasilan, setPenghasilan] = useState("5");
-  const [tanggungan, setTanggungan] = useState("5");
-  const [nilai, setNilai] = useState("5");
-  const [rumah, setRumah] = useState("5");
-  const [listrik, setListrik] = useState("5");
+  const id = searchParams.get("id") || "";
+  const action = searchParams.get("action") || "tambah";
+
+  const [nisn, setNisn] = useState(searchParams.get("nisn") || "");
+  const [nama, setNama] = useState(searchParams.get("nama") || "");
+  const [penghasilan, setPenghasilan] = useState(
+    searchParams.get("penghasilan") || "5"
+  );
+  const [tanggungan, setTanggungan] = useState(
+    searchParams.get("tanggungan") || "5"
+  );
+  const [nilai, setNilai] = useState(searchParams.get("nilai") || "5");
+  const [rumah, setRumah] = useState(searchParams.get("rumah") || "5");
+  const [listrik, setListrik] = useState(searchParams.get("listrik") || "5");
 
   async function tambahData(
     e: FormEvent,
@@ -45,6 +53,44 @@ export default function Form() {
       await router.push("/data-calon-penerima");
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        console.error(error.response?.data);
+      }
+    }
+  }
+
+  async function editData(
+    e: FormEvent,
+    id: string,
+    nisn: string,
+    nama: string,
+    penghasilan: string,
+    tanggungan: string,
+    nilai: string,
+    rumah: string,
+    listrik: string
+  ) {
+    try {
+      e.preventDefault();
+      await axios.post(
+        "/api/alternatif/edit",
+        {
+          id: id,
+          nisn: nisn,
+          nama: nama,
+          penghasilan: penghasilan,
+          jmlTanggungan: tanggungan,
+          nilai: nilai,
+          rumah: rumah,
+          listrik: listrik,
+        },
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      await router.push("/data-calon-penerima");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data);
       }
     }
   }
@@ -218,16 +264,28 @@ export default function Form() {
               <button
                 className="px-5 py-2 bg-[#09A599] text-white font-bold rounded"
                 onClick={(e) =>
-                  tambahData(
-                    e,
-                    nisn,
-                    nama,
-                    penghasilan,
-                    tanggungan,
-                    nilai,
-                    rumah,
-                    listrik
-                  )
+                  action === "tambah"
+                    ? tambahData(
+                        e,
+                        nisn,
+                        nama,
+                        penghasilan,
+                        tanggungan,
+                        nilai,
+                        rumah,
+                        listrik
+                      )
+                    : editData(
+                        e,
+                        id,
+                        nisn,
+                        nama,
+                        penghasilan,
+                        tanggungan,
+                        nilai,
+                        rumah,
+                        listrik
+                      )
                 }
               >
                 Submit
