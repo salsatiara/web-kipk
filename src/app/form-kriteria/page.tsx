@@ -53,114 +53,124 @@ export default function Form() {
           <form className="mt-6">
             <div className="flex mt-4 text-xs">
               <div className="flex flex-col w-1/2 mr-2">
-                <label htmlFor="nisn">NISN</label>
+                <label htmlFor="kode">Kode</label>
                 <input
-                  type="number"
-                  name="nisn"
-                  id="nisn"
-                  placeholder="0000000000"
+                  type="text"
+                  name="kode"
+                  id="kode"
+                  placeholder="C1"
                   className="bg-[#D9D9D9] px-3 py-2"
                 />
               </div>
               <div className="flex flex-col w-1/2 ml-2">
-                <label htmlFor="nisn">NISN</label>
+                <label htmlFor="kriteria">Kriteria</label>
                 <input
-                  type="number"
-                  name="nisn"
-                  id="nisn"
-                  placeholder="0000000000"
+                  type="text"
+                  name="kriteria"
+                  id="kriteria"
+                  placeholder="Penghasilan Orang Tua"
                   className="bg-[#D9D9D9] px-3 py-2"
                 />
               </div>
             </div>
             <p className="mt-4">Rentang Nilai</p>
             <div className="flex flex-col mt-2 text-xs">
-              <label htmlFor="nisn">NISN</label>
-              <input
-                type="number"
-                name="nisn"
-                id="nisn"
-                placeholder="0000000000"
-                className="bg-[#D9D9D9] px-3 py-2"
-              />
-            </div>
-            <div className="flex flex-col mt-4 text-xs">
-              <label htmlFor="nisn">NISN</label>
-              <input
-                type="number"
-                name="nisn"
-                id="nisn"
-                placeholder="0000000000"
-                className="bg-[#D9D9D9] px-3 py-2"
-              />
-            </div>
-            <div className="flex flex-col mt-4 text-xs">
-              <label htmlFor="nisn">NISN</label>
-              <input
-                type="number"
-                name="nisn"
-                id="nisn"
-                placeholder="0000000000"
-                className="bg-[#D9D9D9] px-3 py-2"
-              />
-            </div>
-            <div className="flex flex-col mt-4 text-xs">
-              <label htmlFor="nama">Nama Siswa</label>
+              <label htmlFor="rentang1">Rentang 1</label>
               <input
                 type="text"
-                name="nama"
-                id="nama"
-                placeholder="Marselino Marselino"
+                name="rentang1"
+                id="rentang1"
+                placeholder="Masukkan Rentang Nilai"
                 className="bg-[#D9D9D9] px-3 py-2"
               />
             </div>
             <div className="flex flex-col mt-4 text-xs">
-              <label htmlFor="penghasilan">Penghasilan Orang Tua</label>
+              <label htmlFor="bobot1">Bobot 1</label>
               <input
                 type="number"
-                name="penghasilan"
-                id="penghasilan"
-                placeholder="Rp 2.000.000"
+                name="bobot1"
+                id="bobot1"
+                placeholder="1"
                 className="bg-[#D9D9D9] px-3 py-2"
               />
             </div>
             <div className="flex flex-col mt-4 text-xs">
-              <label htmlFor="tanggungan">Jumlah Tanggungan Keluarga</label>
-              <input
-                type="number"
-                name="tanggungan"
-                id="tanggungan"
-                placeholder="3 Orang"
-                className="bg-[#D9D9D9] px-3 py-2"
-              />
-            </div>
-            <div className="flex flex-col mt-4 text-xs">
-              <label htmlFor="nilai">Nilai Rata-rata Rapor SMA/SMK</label>
-              <input
-                type="number"
-                name="nilai"
-                id="nilai"
-                placeholder="88"
-                className="bg-[#D9D9D9] px-3 py-2"
-              />
-            </div>
-            <div className="flex flex-col mt-4 text-xs">
-              <label htmlFor="aset">Kondisi Rumah dan Aset</label>
+              <label htmlFor="rentang2">Rentang 2</label>
               <input
                 type="text"
-                name="aset"
-                id="aset"
-                placeholder="Rumah milik sendiri, punya motor"
+                name="rentang2"
+                id="rentang2"
+                placeholder="Masukkan Rentang Nilai"
                 className="bg-[#D9D9D9] px-3 py-2"
               />
             </div>
             <div className="flex flex-col mt-4 text-xs">
-              <label htmlFor="listrik">Daya Listrik PLN</label>
+              <label htmlFor="bobot2">Bobot</label>
               <input
                 type="number"
-                name="listrik"
-                id="listrik"
-                placeholder="900 VA"
+                name="bobot2"
+                id="bobot2"
+                placeholder="2"
+                className="bg-[#D9D9D9] px-3 py-2"
+              />
+            </div>
+            <div className="flex flex-col mt-4 text-xs">
+              <label htmlFor="rentang3">Rentang 3</label>
+              <input
+                type="text"
+                name="rentang3"
+                id="rentang 3"
+                placeholder="Masukkan Rentang Nilai"
+                className="bg-[#D9D9D9] px-3 py-2"
+              />
+            </div>
+            <div className="flex flex-col mt-4 text-xs">
+              <label htmlFor="bobot3">Bobot 3</label>
+              <input
+                type="number"
+                name="bobot3"
+                id="bobot3"
+                placeholder="3"
+                className="bg-[#D9D9D9] px-3 py-2"
+              />
+            </div>
+            <div className="flex flex-col mt-4 text-xs">
+              <label htmlFor="rentang4">Rentang 4</label>
+              <input
+                type="text"
+                name="rentang4"
+                id="rentang4"
+                placeholder="Masukkan Rentang Nilai"
+                className="bg-[#D9D9D9] px-3 py-2"
+              />
+            </div>
+            <div className="flex flex-col mt-4 text-xs">
+              <label htmlFor="bobot4">Bobot 4</label>
+              <input
+                type="number"
+                name="bobot4"
+                id="bobot4"
+                placeholder="4"
+                className="bg-[#D9D9D9] px-3 py-2"
+              />
+            </div>
+            <div className="flex flex-col mt-4 text-xs">
+              <label htmlFor="rentang5">Rentang 5</label>
+              <input
+                type="text"
+                name="rentang5"
+                id="rentang5"
+                placeholder="Masukkan Rentang Nilai"
+                className="bg-[#D9D9D9] px-3 py-2"
+              />
+            </div>
+            <div className="flex flex-col mt-4 text-xs">
+              <label htmlFor="bobot5">Bobot 5</label>
+              <input
+                type="number"
+                name="bobot5"
+                id="bobot5"
+                placeholder="5"
                 className="bg-[#D9D9D9] px-3 py-2"
               />
             </div>
