@@ -1,6 +1,11 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
+import { AuthContext } from "@/services/storage";
+import axios, { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
+import { useContext, useEffect } from "react";
+import jwt from "jsonwebtoken";
 import {
   BsCardChecklist,
   BsCircleFill,
@@ -8,7 +13,53 @@ import {
   BsFillPeopleFill,
 } from "react-icons/bs";
 
+interface PayloadToken {
+  id: string;
+  username: string;
+  role: string;
+  nisn: string;
+  iat: number;
+  exp: number;
+}
+
 export default function Home() {
+  const axiosToken = axios.create();
+  const router = useRouter();
+  const auth = useContext(AuthContext);
+
+  async function refreshToken() {
+    try {
+      const response = await axiosToken.post(
+        "/api/auth/token",
+        {},
+        { withCredentials: true }
+      );
+      auth.setToken(response.data.accessToken);
+      const decoded =
+        (jwt.decode(response.data.accessToken) as PayloadToken) || null;
+      if (decoded) {
+        auth.setId(decoded.id);
+        auth.setUsername(decoded.username);
+        auth.setRole(decoded.role);
+        auth.setNisn(decoded.nisn);
+        auth.setExpire(decoded.exp);
+        router.push("/dashboard-admin"); // nanti ganti student
+        console.log(decoded);
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        router.push("/login-student");
+      }
+    }
+  }
+
+  useEffect(() => {
+    async function fetcher() {
+      await refreshToken();
+    }
+    fetcher();
+  }, []);
+
   return (
     <>
       <Navbar />
