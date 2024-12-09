@@ -39,3 +39,12 @@ model Kriteria {
   rentang5       String
   bobot5         Int
 }
+
+model User {
+  id            Int       @id @default(autoincrement())
+  username      String    @unique
+  password      String    @db.Text
+  nisn          String?   @unique
+  role          String
+  refreshToken  String?   @db.Text
+}
