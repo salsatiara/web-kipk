@@ -62,7 +62,7 @@ type Data = {
   }[];
 };
 
-export default function Form() {
+export default function DataCalonPenerima() {
   const [data, setData] = useState<Data>();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [alertIsOpen, setAlertIsOpen] = useState(false);
