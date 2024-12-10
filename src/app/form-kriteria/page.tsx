@@ -1,50 +1,125 @@
 "use client";
 
-import { Fade as Hamburger } from "hamburger-react";
-import { useState } from "react";
-import {
-  BsBook,
-  BsBoxArrowRight,
-  BsJournalText,
-  BsPersonCircle,
-  BsPlusSlashMinus,
-} from "react-icons/bs";
+import Navbar from "@/components/Navbar";
+import axios from "axios";
+import { FormEvent, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 export default function Form() {
-  const [isOpen, setOpen] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const id = searchParams.get("id") || "";
+  const action = searchParams.get("action") || "tambah";
+
+  const [kode, setKode] = useState(searchParams.get("kode") || "");
+  const [kriteria, setKriteria] = useState(searchParams.get("kriteria") || "");
+  const [rentang1, setRentang1] = useState(searchParams.get("rentang1") || "");
+  const [bobot1, setBobot1] = useState(searchParams.get("bobot1") || "");
+  const [rentang2, setRentang2] = useState(searchParams.get("rentang2") || "");
+  const [bobot2, setBobot2] = useState(searchParams.get("bobot2") || "");
+  const [rentang3, setRentang3] = useState(searchParams.get("rentang3") || "");
+  const [bobot3, setBobot3] = useState(searchParams.get("bobot3") || "");
+  const [rentang4, setRentang4] = useState(searchParams.get("rentang4") || "");
+  const [bobot4, setBobot4] = useState(searchParams.get("bobot4") || "");
+  const [rentang5, setRentang5] = useState(searchParams.get("rentang5") || "");
+  const [bobot5, setBobot5] = useState(searchParams.get("bobot5") || "");
+
+  async function tambahData(
+    e: FormEvent,
+    kode: string,
+    kriteria: string,
+    rentang1: string,
+    bobot1: string,
+    rentang2: string,
+    bobot2: string,
+    rentang3: string,
+    bobot3: string,
+    rentang4: string,
+    bobot4: string,
+    rentang5: string,
+    bobot5: string
+  ) {
+    try {
+      e.preventDefault();
+      await axios.post(
+        "/api/kriteria/tambah",
+        {
+          kode: kode,
+          kriteria: kriteria,
+          rentang1: rentang1,
+          bobot1: bobot1,
+          rentang2: rentang2,
+          bobot2: bobot2,
+          rentang3: rentang3,
+          bobot3: bobot3,
+          rentang4: rentang4,
+          bobot4: bobot4,
+          rentang5: rentang5,
+          bobot5: bobot5,
+        },
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      await router.push("/data-kriteria");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data);
+      }
+    }
+  }
+
+  async function editData(
+    e: FormEvent,
+    id: string,
+    kode: string,
+    kriteria: string,
+    rentang1: string,
+    bobot1: string,
+    rentang2: string,
+    bobot2: string,
+    rentang3: string,
+    bobot3: string,
+    rentang4: string,
+    bobot4: string,
+    rentang5: string,
+    bobot5: string
+  ) {
+    try {
+      e.preventDefault();
+      await axios.post(
+        "/api/kriteria/edit",
+        {
+          id: id,
+          kode: kode,
+          kriteria: kriteria,
+          rentang1: rentang1,
+          bobot1: bobot1,
+          rentang2: rentang2,
+          bobot2: bobot2,
+          rentang3: rentang3,
+          bobot3: bobot3,
+          rentang4: rentang4,
+          bobot4: bobot4,
+          rentang5: rentang5,
+          bobot5: bobot5,
+        },
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      await router.push("/data-kriteria");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data);
+      }
+    }
+  }
+
   return (
     <>
-      <div className="flex top-0 left-0 z-40 sticky bg-[#1684A7]">
-        <Hamburger toggled={isOpen} toggle={setOpen} size={18} color="#000" />
-        <div className="flex w-full justify-between items-center ml-4 mr-6 text-sm font-semibold">
-          <p className="text-black">KIP-Kuliah</p>
-          <BsPersonCircle size={24} color="#000" />
-        </div>
-      </div>
-      <div
-        className={`flex flex-col top-12 left-0 fixed z-30 bg-[#CFE4EB] text-black duration-200 ${
-          isOpen ? "translate-x-0" : "-translate-x-56"
-        }`}
-      >
-        <div className="px-6 py-4 text-sm flex items-center border-b border-[#A3A3A3]">
-          <BsBook size={24} color="#000" />
-          <p className="ml-2">Data Calon Penerima</p>
-        </div>
-        <div className="px-6 py-4 text-sm flex items-center border-b border-[#A3A3A3]">
-          <BsJournalText size={24} color="#000" />
-          <p className="ml-2">Data Kriteria</p>
-        </div>
-        <div className="px-6 py-4 text-sm flex items-center border-b border-[#A3A3A3]">
-          <BsPlusSlashMinus
-            className="border-[1.7px] rounded border-black p-1 stroke-[1px]"
-            size={24}
-            color="#000"
-          />
-          <p className="ml-2">Perhitungan</p>
-        </div>
-        <div className="px-6 py-4 mt-10 ml-auto">
-          <BsBoxArrowRight size={24} />
-        </div>
-      </div>
+      <Navbar />
       <div className="bg-white h-screen text-black flex flex-col items-center">
         <div className="lg:w-1/3 flex flex-col">
           <p className="text-[#1684A7] font-bold mt-8 text-center">
@@ -60,6 +135,8 @@ export default function Form() {
                   id="kode"
                   placeholder="C1"
                   className="bg-[#D9D9D9] px-3 py-2"
+                  value={kode}
+                  onChange={(e) => setKode(e.target.value)}
                 />
               </div>
               <div className="flex flex-col w-1/2 ml-2">
@@ -70,6 +147,8 @@ export default function Form() {
                   id="kriteria"
                   placeholder="Penghasilan Orang Tua"
                   className="bg-[#D9D9D9] px-3 py-2"
+                  value={kriteria}
+                  onChange={(e) => setKriteria(e.target.value)}
                 />
               </div>
             </div>
@@ -82,6 +161,8 @@ export default function Form() {
                 id="rentang1"
                 placeholder="Masukkan Rentang Nilai"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={rentang1}
+                onChange={(e) => setRentang1(e.target.value)}
               />
             </div>
             <div className="flex flex-col mt-4 text-xs">
@@ -92,6 +173,8 @@ export default function Form() {
                 id="bobot1"
                 placeholder="1"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={bobot1}
+                onChange={(e) => setBobot1(e.target.value)}
               />
             </div>
             <div className="flex flex-col mt-4 text-xs">
@@ -102,6 +185,8 @@ export default function Form() {
                 id="rentang2"
                 placeholder="Masukkan Rentang Nilai"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={rentang2}
+                onChange={(e) => setRentang2(e.target.value)}
               />
             </div>
             <div className="flex flex-col mt-4 text-xs">
@@ -112,6 +197,8 @@ export default function Form() {
                 id="bobot2"
                 placeholder="2"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={bobot2}
+                onChange={(e) => setBobot2(e.target.value)}
               />
             </div>
             <div className="flex flex-col mt-4 text-xs">
@@ -122,6 +209,8 @@ export default function Form() {
                 id="rentang 3"
                 placeholder="Masukkan Rentang Nilai"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={rentang3}
+                onChange={(e) => setRentang3(e.target.value)}
               />
             </div>
             <div className="flex flex-col mt-4 text-xs">
@@ -132,6 +221,8 @@ export default function Form() {
                 id="bobot3"
                 placeholder="3"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={bobot3}
+                onChange={(e) => setBobot3(e.target.value)}
               />
             </div>
             <div className="flex flex-col mt-4 text-xs">
@@ -142,6 +233,8 @@ export default function Form() {
                 id="rentang4"
                 placeholder="Masukkan Rentang Nilai"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={rentang4}
+                onChange={(e) => setRentang4(e.target.value)}
               />
             </div>
             <div className="flex flex-col mt-4 text-xs">
@@ -152,6 +245,8 @@ export default function Form() {
                 id="bobot4"
                 placeholder="4"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={bobot4}
+                onChange={(e) => setBobot4(e.target.value)}
               />
             </div>
             <div className="flex flex-col mt-4 text-xs">
@@ -162,6 +257,8 @@ export default function Form() {
                 id="rentang5"
                 placeholder="Masukkan Rentang Nilai"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={rentang5}
+                onChange={(e) => setRentang5(e.target.value)}
               />
             </div>
             <div className="flex flex-col mt-4 text-xs">
@@ -172,13 +269,68 @@ export default function Form() {
                 id="bobot5"
                 placeholder="5"
                 className="bg-[#D9D9D9] px-3 py-2"
+                value={bobot5}
+                onChange={(e) => setBobot5(e.target.value)}
               />
             </div>
             <div className="flex justify-evenly my-6 text-sm">
-              <button className="px-5 py-2 bg-[#09A599] text-white font-bold rounded">
+              <button
+                className="px-5 py-2 bg-[#09A599] text-white font-bold rounded"
+                onClick={(e) =>
+                  action === "tambah"
+                    ? tambahData(
+                        e,
+                        kode,
+                        kriteria,
+                        rentang1,
+                        bobot1,
+                        rentang2,
+                        bobot2,
+                        rentang3,
+                        bobot3,
+                        rentang4,
+                        bobot4,
+                        rentang5,
+                        bobot5
+                      )
+                    : editData(
+                        e,
+                        id,
+                        kode,
+                        kriteria,
+                        rentang1,
+                        bobot1,
+                        rentang2,
+                        bobot2,
+                        rentang3,
+                        bobot3,
+                        rentang4,
+                        bobot4,
+                        rentang5,
+                        bobot5
+                      )
+                }
+              >
                 Submit
               </button>
-              <button className="px-5 py-2 bg-[#EB0707] text-white font-bold rounded">
+              <button
+                className="px-5 py-2 bg-[#EB0707] text-white font-bold rounded"
+                onClick={(e: FormEvent) => {
+                  e.preventDefault();
+                  setKode("");
+                  setKriteria("");
+                  setRentang1("");
+                  setBobot1("");
+                  setRentang2("");
+                  setBobot2("");
+                  setRentang3("");
+                  setBobot3("");
+                  setRentang4("");
+                  setBobot4("");
+                  setRentang5("");
+                  setBobot5("");
+                }}
+              >
                 Reset
               </button>
             </div>
