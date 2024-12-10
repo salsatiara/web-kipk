@@ -290,7 +290,19 @@ export default function Form() {
               >
                 Submit
               </button>
-              <button className="px-5 py-2 bg-[#EB0707] text-white font-bold rounded">
+              <button
+                className="px-5 py-2 bg-[#EB0707] text-white font-bold rounded"
+                onClick={(e: FormEvent) => {
+                  e.preventDefault();
+                  setNisn("");
+                  setNama("");
+                  setPenghasilan("5");
+                  setTanggungan("5");
+                  setNilai("5");
+                  setRumah("5");
+                  setListrik("5");
+                }}
+              >
                 Reset
               </button>
             </div>
