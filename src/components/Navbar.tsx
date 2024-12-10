@@ -36,7 +36,9 @@ export default function Navbar() {
         </div>
         <div className="px-6 py-4 text-sm flex items-center border-b border-[#A3A3A3]">
           <BsJournalText size={24} color="#000" />
-          <p className="ml-2">Data Kriteria</p>
+          <Link className="ml-2" href="/data-kriteria">
+            Data Kriteria
+          </Link>
         </div>
         <div className="px-6 py-4 text-sm flex items-center border-b border-[#A3A3A3]">
           <BsPlusSlashMinus
