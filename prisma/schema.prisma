@@ -28,6 +28,8 @@ model Kriteria {
   id             Int      @id @default(autoincrement())
   kode           String
   kriteria       String
+  tipe           String
+  bobot          Float
   rentang1       String
   bobot1         Int
   rentang2       String
