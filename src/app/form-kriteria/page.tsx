@@ -14,6 +14,8 @@ export default function Form() {
 
   const [kode, setKode] = useState(searchParams.get("kode") || "");
   const [kriteria, setKriteria] = useState(searchParams.get("kriteria") || "");
+  const [tipe, setTipe] = useState(searchParams.get("tipe") || "");
+  const [bobot, setBobot] = useState(searchParams.get("bobot") || "");
   const [rentang1, setRentang1] = useState(searchParams.get("rentang1") || "");
   const [bobot1, setBobot1] = useState(searchParams.get("bobot1") || "");
   const [rentang2, setRentang2] = useState(searchParams.get("rentang2") || "");
@@ -29,6 +31,8 @@ export default function Form() {
     e: FormEvent,
     kode: string,
     kriteria: string,
+    tipe: string,
+    bobot: number,
     rentang1: string,
     bobot1: string,
     rentang2: string,
@@ -47,6 +51,8 @@ export default function Form() {
         {
           kode: kode,
           kriteria: kriteria,
+          tipe: tipe,
+          bobot: bobot,
           rentang1: rentang1,
           bobot1: bobot1,
           rentang2: rentang2,
@@ -75,6 +81,8 @@ export default function Form() {
     id: string,
     kode: string,
     kriteria: string,
+    tipe: string,
+    bobot: number,
     rentang1: string,
     bobot1: string,
     rentang2: string,
@@ -94,6 +102,8 @@ export default function Form() {
           id: id,
           kode: kode,
           kriteria: kriteria,
+          tipe: tipe,
+          bobot: bobot,
           rentang1: rentang1,
           bobot1: bobot1,
           rentang2: rentang2,
@@ -149,6 +159,32 @@ export default function Form() {
                   className="bg-[#D9D9D9] px-3 py-2"
                   value={kriteria}
                   onChange={(e) => setKriteria(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="flex mt-4 text-xs">
+              <div className="flex flex-col w-1/2 mr-2">
+                <label htmlFor="tipe">Tipe</label>
+                <input
+                  type="text"
+                  name="tipe"
+                  id="tipe"
+                  placeholder="COST"
+                  className="bg-[#D9D9D9] px-3 py-2"
+                  value={tipe}
+                  onChange={(e) => setTipe(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col w-1/2 ml-2">
+                <label htmlFor="bobot">Bobot Kriteria</label>
+                <input
+                  type="number"
+                  name="bobot"
+                  id="bobot"
+                  placeholder="0.15"
+                  className="bg-[#D9D9D9] px-3 py-2"
+                  value={bobot}
+                  onChange={(e) => setBobot(e.target.value)}
                 />
               </div>
             </div>
@@ -282,6 +318,8 @@ export default function Form() {
                         e,
                         kode,
                         kriteria,
+                        tipe,
+                        parseFloat(bobot),
                         rentang1,
                         bobot1,
                         rentang2,
@@ -298,6 +336,8 @@ export default function Form() {
                         id,
                         kode,
                         kriteria,
+                        tipe,
+                        parseFloat(bobot),
                         rentang1,
                         bobot1,
                         rentang2,

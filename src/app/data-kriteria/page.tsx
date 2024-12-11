@@ -49,6 +49,8 @@ type Data = {
     id: number;
     kode: string;
     kriteria: string;
+    tipe: string;
+    bobot: number;
     rentang1: string;
     bobot1: number;
     rentang2: string;
@@ -207,6 +209,12 @@ export default function DataKriteria() {
                     Kriteria
                   </th>
                   <th className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap font-medium text-sm">
+                    Tipe
+                  </th>
+                  <th className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap font-medium text-sm">
+                    Bobot Kriteria
+                  </th>
+                  <th className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap font-medium text-sm">
                     Rentang Nilai
                   </th>
                   <th className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap font-medium text-sm">
@@ -241,6 +249,18 @@ export default function DataKriteria() {
                       </td>
                       <td
                         className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center"
+                        rowSpan={5}
+                      >
+                        {item.tipe}
+                      </td>
+                      <td
+                        className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center"
+                        rowSpan={5}
+                      >
+                        {item.bobot.toFixed(2)}
+                      </td>
+                      <td
+                        className="border border-[#A3A3A3] px-3 py-2 whitespace-nowrap text-sm text-center"
                         rowSpan={1}
                       >
                         {item.rentang1}
@@ -257,7 +277,7 @@ export default function DataKriteria() {
                       >
                         <div className="flex items-center">
                           <Link
-                            href={`/form-kriteria?id=${item.id}&kode=${item.kode}&kriteria=${item.kriteria}&rentang1=${item.rentang1}&bobot1=${item.bobot1}&rentang2=${item.rentang2}&bobot2=${item.bobot2}&rentang3=${item.rentang3}&bobot3=${item.bobot3}&rentang4=${item.rentang4}&bobot4=${item.bobot4}&rentang5=${item.rentang5}&bobot5=${item.bobot5}&action=edit`}
+                            href={`/form-kriteria?id=${item.id}&kode=${item.kode}&kriteria=${item.kriteria}&tipe=${item.tipe}&bobot=${item.bobot}&rentang1=${item.rentang1}&bobot1=${item.bobot1}&rentang2=${item.rentang2}&bobot2=${item.bobot2}&rentang3=${item.rentang3}&bobot3=${item.bobot3}&rentang4=${item.rentang4}&bobot4=${item.bobot4}&rentang5=${item.rentang5}&bobot5=${item.bobot5}&action=edit`}
                             className="bg-[#F6EC72] text-black px-2 py-1 rounded inline-block"
                           >
                             <BsPencilSquare size={14} />
