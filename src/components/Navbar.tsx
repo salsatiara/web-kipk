@@ -46,7 +46,9 @@ export default function Navbar() {
             size={24}
             color="#000"
           />
-          <p className="ml-2">Perhitungan</p>
+          <Link href="/perhitungan-topsis" className="ml-2">
+            Perhitungan
+          </Link>
         </div>
         <div className="px-6 py-4 mt-10 ml-auto">
           <BsBoxArrowRight size={24} />
