@@ -9,6 +9,8 @@ export async function POST(request: Request) {
     const kode: FormDataEntryValue = (formData.get("kode") as string) || "";
     const kriteria: FormDataEntryValue =
       (formData.get("kriteria") as string) || "";
+    const tipe: FormDataEntryValue = (formData.get("tipe") as string) || "";
+    const bobot: FormDataEntryValue = (formData.get("bobot") as string) || "";
     const rentang1: FormDataEntryValue =
       (formData.get("rentang1") as string) || "";
     const bobot1: FormDataEntryValue = (formData.get("bobot1") as string) || "";
@@ -41,6 +43,28 @@ export async function POST(request: Request) {
         {
           status: "error",
           message: "kriteria cannot be empty",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+    if (tipe === null || tipe === "") {
+      return Response.json(
+        {
+          status: "error",
+          message: "tipe cannot be empty",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+    if (bobot === null || bobot === "") {
+      return Response.json(
+        {
+          status: "error",
+          message: "bobot cannot be empty",
         },
         {
           status: 400,
@@ -180,6 +204,8 @@ export async function POST(request: Request) {
       data: {
         kode: kode,
         kriteria: kriteria,
+        tipe: tipe,
+        bobot: parseFloat(bobot),
         rentang1: rentang1,
         bobot1: parseInt(bobot1),
         rentang2: rentang2,
