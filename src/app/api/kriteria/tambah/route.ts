@@ -219,6 +219,12 @@ export async function POST(request: Request) {
       },
     });
 
+    await prisma.aktivitas.create({
+      data: {
+        pesan: `Membuat data kriteria dengan kode ${kode}`,
+      },
+    });
+
     return Response.json(
       {
         status: "Success",

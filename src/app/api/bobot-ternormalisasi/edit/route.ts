@@ -48,6 +48,12 @@ export async function POST(request: Request) {
       })),
     });
 
+    await prisma.aktivitas.create({
+      data: {
+        pesan: `Perhitungan bobot ternormalisasi selesai`,
+      },
+    });
+
     return Response.json(
       {
         status: "Success",

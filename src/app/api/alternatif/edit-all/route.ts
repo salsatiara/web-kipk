@@ -59,6 +59,12 @@ export async function POST(request: Request) {
       )
     );
 
+    await prisma.aktivitas.create({
+      data: {
+        pesan: `Perhitungan batch selesai`,
+      },
+    });
+
     return Response.json(
       {
         status: "Success",

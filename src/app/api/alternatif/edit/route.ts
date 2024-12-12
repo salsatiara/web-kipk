@@ -140,6 +140,12 @@ export async function POST(request: Request) {
       },
     });
 
+    await prisma.aktivitas.create({
+      data: {
+        pesan: `Pembaruan data mahasiswa dengan NISN ${data.nisn}`,
+      },
+    });
+
     return Response.json(
       {
         status: "Success",

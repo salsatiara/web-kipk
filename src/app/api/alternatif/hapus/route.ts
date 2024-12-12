@@ -26,6 +26,12 @@ export async function DELETE(request: Request) {
       },
     });
 
+    await prisma.aktivitas.create({
+      data: {
+        pesan: `Menghapus data mahasiswa dengan NISN ${data.nisn}`,
+      },
+    });
+
     return Response.json(
       {
         status: "Success",

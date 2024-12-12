@@ -125,6 +125,12 @@ export async function POST(request: Request) {
       },
     });
 
+    await prisma.aktivitas.create({
+      data: {
+        pesan: `Penambahan data mahasiswa baru dengan NISN ${nisn}`,
+      },
+    });
+
     return Response.json(
       {
         status: "Success",
