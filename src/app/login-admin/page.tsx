@@ -1,7 +1,80 @@
+"use client";
+
+import { AuthContext } from "@/services/storage";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { FormEvent, useContext, useEffect, useState } from "react";
+import jwt from "jsonwebtoken";
+
+interface PayloadToken {
+  id: string;
+  username: string;
+  role: string;
+  nisn: string;
+  iat: number;
+  exp: number;
+}
 
 export default function Home() {
+  const router = useRouter();
+  const auth = useContext(AuthContext);
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  async function refreshToken() {
+    try {
+      const response = await axios.post(
+        "/api/auth/token",
+        {},
+        { withCredentials: true }
+      );
+      console.log(response.data);
+
+      auth.setToken(response.data.accessToken);
+      const decoded =
+        (jwt.decode(response.data.accessToken) as PayloadToken) || null;
+      if (decoded) {
+        auth.setId(decoded.id);
+        auth.setUsername(decoded.username);
+        auth.setRole(decoded.role);
+        auth.setNisn(decoded.nisn);
+        auth.setExpire(decoded.exp);
+        router.push("/dashboard-admin");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function loginHandler(
+    e: FormEvent,
+    username: string,
+    password: string
+  ) {
+    try {
+      e.preventDefault();
+      await axios.post(
+        "/api/auth/login",
+        { username: username, password: password, role: "admin" },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      router.push("/dashboard-admin");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    refreshToken();
+  }, []);
   return (
     <>
       <div className="flex w-full h-screen min-h-min bg-gray-100 text-black justify-center">
@@ -25,16 +98,27 @@ export default function Home() {
               className="bg-[#E6E6E6] w-full rounded px-3 py-2 text-xs"
               type="text"
               placeholder="Username"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <input
               className="bg-[#E6E6E6] w-full rounded px-3 py-2 text-xs mt-8"
               type="password"
               placeholder="Password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <p className="text-[#09A599] text-xs text-right mt-2">
               Lupa password?
             </p>
-            <button className="bg-[#09A599] w-full rounded text-white text-xs py-2 mt-4">
+            <button
+              onClick={(e) => {
+                loginHandler(e, username, password);
+              }}
+              className="bg-[#09A599] w-full rounded text-white text-xs py-2 mt-4"
+            >
               Log in
             </button>
             <Link

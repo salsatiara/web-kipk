@@ -1,12 +1,25 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import axios from "axios";
+import { AuthContext } from "@/services/storage";
+import axios, { AxiosError } from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
+import jwt from "jsonwebtoken";
+
+interface PayloadToken {
+  id: string;
+  username: string;
+  role: string;
+  nisn: string;
+  iat: number;
+  exp: number;
+}
+
 export default function Form() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const auth = useContext(AuthContext);
 
   const id = searchParams.get("id") || "";
   const action = searchParams.get("action") || "tambah";
@@ -22,6 +35,33 @@ export default function Form() {
   const [nilai, setNilai] = useState(searchParams.get("nilai") || "5");
   const [rumah, setRumah] = useState(searchParams.get("rumah") || "5");
   const [listrik, setListrik] = useState(searchParams.get("listrik") || "5");
+
+  async function refreshToken() {
+    try {
+      const response = await axios.post(
+        "/api/auth/token",
+        {},
+        { withCredentials: true }
+      );
+      auth.setToken(response.data.accessToken);
+      const decoded =
+        (jwt.decode(response.data.accessToken) as PayloadToken) || null;
+      if (decoded) {
+        auth.setId(decoded.id);
+        auth.setUsername(decoded.username);
+        auth.setRole(decoded.role);
+        auth.setNisn(decoded.nisn);
+        auth.setExpire(decoded.exp);
+        if (decoded.role !== "admin") {
+          router.push("/dashboard-mahasiswa");
+        }
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        router.push("/login-admin");
+      }
+    }
+  }
 
   async function tambahData(
     e: FormEvent,
@@ -95,10 +135,14 @@ export default function Form() {
     }
   }
 
+  useEffect(() => {
+    refreshToken();
+  }, []);
+
   return (
     <>
       <Navbar />
-      <div className="bg-white h-screen text-black flex flex-col items-center">
+      <div className="bg-white text-black flex flex-col items-center">
         <div className="lg:w-1/3 flex flex-col">
           <p className="text-[#1684A7] font-bold mt-8 text-center">
             Biodata Calon Penerima

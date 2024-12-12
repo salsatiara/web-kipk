@@ -1,9 +1,11 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import axios from "axios";
+import { AuthContext } from "@/services/storage";
+import axios, { AxiosError } from "axios";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
 import {
   BsCheck2,
   BsJournalText,
@@ -12,6 +14,7 @@ import {
   BsTrash3,
 } from "react-icons/bs";
 import Modal from "react-modal";
+import jwt from "jsonwebtoken";
 
 const option: {
   value: string;
@@ -64,11 +67,50 @@ type Data = {
   }[];
 };
 
+interface PayloadToken {
+  id: string;
+  username: string;
+  role: string;
+  nisn: string;
+  iat: number;
+  exp: number;
+}
+
 export default function DataKriteria() {
+  const router = useRouter();
+  const auth = useContext(AuthContext);
+
   const [data, setData] = useState<Data>();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [alertIsOpen, setAlertIsOpen] = useState(false);
   const [dataid, setDataId] = useState<number>(0);
+
+  async function refreshToken() {
+    try {
+      const response = await axios.post(
+        "/api/auth/token",
+        {},
+        { withCredentials: true }
+      );
+      auth.setToken(response.data.accessToken);
+      const decoded =
+        (jwt.decode(response.data.accessToken) as PayloadToken) || null;
+      if (decoded) {
+        auth.setId(decoded.id);
+        auth.setUsername(decoded.username);
+        auth.setRole(decoded.role);
+        auth.setNisn(decoded.nisn);
+        auth.setExpire(decoded.exp);
+        if (decoded.role !== "admin") {
+          router.push("/dashboard-mahasiswa");
+        }
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        router.push("/login-admin");
+      }
+    }
+  }
 
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
@@ -102,6 +144,7 @@ export default function DataKriteria() {
   }
 
   useEffect(() => {
+    refreshToken();
     fetchData();
   }, []);
 
@@ -157,7 +200,7 @@ export default function DataKriteria() {
         </div>
       </Modal>
       <Navbar />
-      <div className="bg-white h-screen w-full text-black flex flex-col">
+      <div className="bg-white w-full text-black flex flex-col">
         <div className="flex flex-col">
           <div className="flex justify-between px-4 py-2 bg-[#E6E6E6] rounded">
             <div className="flex items-center">

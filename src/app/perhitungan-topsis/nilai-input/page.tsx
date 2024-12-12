@@ -1,10 +1,21 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import axios from "axios";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { BsPlusLg, BsPlusSlashMinus } from "react-icons/bs";
+import axios, { AxiosError } from "axios";
+import { useContext, useEffect, useState } from "react";
+import { BsPlusSlashMinus } from "react-icons/bs";
+import jwt from "jsonwebtoken";
+import { AuthContext } from "@/services/storage";
+import { useRouter } from "next/navigation";
+
+interface PayloadToken {
+  id: string;
+  username: string;
+  role: string;
+  nisn: string;
+  iat: number;
+  exp: number;
+}
 
 type Data = {
   status: string;
@@ -22,7 +33,37 @@ type Data = {
 };
 
 export default function Page() {
+  const router = useRouter();
+  const auth = useContext(AuthContext);
+
   const [data, setData] = useState<Data>();
+
+  async function refreshToken() {
+    try {
+      const response = await axios.post(
+        "/api/auth/token",
+        {},
+        { withCredentials: true }
+      );
+      auth.setToken(response.data.accessToken);
+      const decoded =
+        (jwt.decode(response.data.accessToken) as PayloadToken) || null;
+      if (decoded) {
+        auth.setId(decoded.id);
+        auth.setUsername(decoded.username);
+        auth.setRole(decoded.role);
+        auth.setNisn(decoded.nisn);
+        auth.setExpire(decoded.exp);
+        if (decoded.role !== "admin") {
+          router.push("/dashboard-mahasiswa");
+        }
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        router.push("/login-admin");
+      }
+    }
+  }
 
   async function fetchData() {
     const response = await axios.get<Data>("/api/alternatif");
@@ -30,6 +71,7 @@ export default function Page() {
   }
 
   useEffect(() => {
+    refreshToken();
     fetchData();
   }, []);
 
@@ -47,15 +89,10 @@ export default function Page() {
               />
               <p className="ml-2">Perhitungan</p>
             </div>
-            <div className="flex items-center">
-              <Link href="/form-mahasiswa?action=tambah">
-                <BsPlusLg size={24} color="#000" />
-              </Link>
-            </div>
           </div>
         </div>
         <div className="overflow-x-auto w-full flex mt-16">
-          <table className="border mx-auto">
+          <table className="border w-full mx-16">
             <thead className="bg-[#1684A7]">
               <tr>
                 <th
