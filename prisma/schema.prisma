@@ -64,3 +64,10 @@ model Matriks {
   rumah         Float
   listrik       Float
 }
+
+model Aktivitas {
+  id            Int      @id @default(autoincrement())
+  pesan         String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
