@@ -22,6 +22,9 @@ model Alternatif {
   nilai         Int
   rumah         Int
   listrik       Int
+  jarakPositif  Float   @default(1)
+  jarakNegatif  Float   @default(1)
+  preferensi    Float   @default(1)
 }
 
 model Kriteria {
@@ -49,4 +52,15 @@ model User {
   nisn          String?   @unique
   role          String
   refreshToken  String?   @db.Text
+}
+
+model Matriks {
+  id            Int      @id @default(autoincrement())
+  nisn          String
+  nama          String
+  penghasilan   Float
+  jmlTanggungan Float
+  nilai         Float
+  rumah         Float
+  listrik       Float
 }
