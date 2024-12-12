@@ -14,6 +14,7 @@ export async function POST(request: Request) {
       (formData.get("username") as string) || "";
     const password: FormDataEntryValue =
       (formData.get("password") as string) || "";
+    const role: FormDataEntryValue = (formData.get("role") as string) || "";
 
     if (username === null || username === "") {
       return Response.json(
@@ -31,6 +32,17 @@ export async function POST(request: Request) {
         {
           status: "error",
           message: "password cannot be empty",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+    if (role === null || role === "") {
+      return Response.json(
+        {
+          status: "error",
+          message: "role cannot be empty",
         },
         {
           status: 400,
@@ -63,6 +75,7 @@ export async function POST(request: Request) {
     const data = await prisma.user.findUnique({
       where: {
         username: username,
+        role: role,
       },
     });
 
