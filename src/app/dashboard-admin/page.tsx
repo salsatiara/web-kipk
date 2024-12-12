@@ -23,13 +23,12 @@ interface PayloadToken {
 }
 
 export default function Home() {
-  const axiosToken = axios.create();
   const router = useRouter();
   const auth = useContext(AuthContext);
 
   async function refreshToken() {
     try {
-      const response = await axiosToken.post(
+      const response = await axios.post(
         "/api/auth/token",
         {},
         { withCredentials: true }
@@ -43,12 +42,13 @@ export default function Home() {
         auth.setRole(decoded.role);
         auth.setNisn(decoded.nisn);
         auth.setExpire(decoded.exp);
-        router.push("/dashboard-admin"); // nanti ganti student
-        console.log(decoded);
+        if (decoded.role !== "admin") {
+          router.push("/dashboard-mahasiswa");
+        }
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        router.push("/login-student");
+        router.push("/login-admin");
       }
     }
   }

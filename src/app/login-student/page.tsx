@@ -42,7 +42,7 @@ export default function Home() {
         auth.setRole(decoded.role);
         auth.setNisn(decoded.nisn);
         auth.setExpire(decoded.exp);
-        router.push("/dashboard-admin"); // nanti ganti student
+        router.push("/dashboard-student");
       }
     } catch (error) {
       console.error(error);
@@ -58,7 +58,7 @@ export default function Home() {
       e.preventDefault();
       await axios.post(
         "/api/auth/login",
-        { username: username, password: password },
+        { username: username, password: password, role: "mahasiswa" },
         {
           withCredentials: true,
           headers: {
@@ -66,7 +66,7 @@ export default function Home() {
           },
         }
       );
-      router.push("/dashboard-admin"); // nanti ganti student
+      router.push("/dashboard-mahasiswa");
     } catch (error) {
       console.error(error);
     }
