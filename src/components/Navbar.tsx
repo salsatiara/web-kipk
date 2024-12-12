@@ -1,5 +1,7 @@
+import axios from "axios";
 import { Fade as Hamburger } from "hamburger-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   BsBook,
@@ -10,7 +12,17 @@ import {
 } from "react-icons/bs";
 
 export default function Navbar() {
+  const router = useRouter();
   const [isOpen, setOpen] = useState(false);
+
+  async function logout() {
+    try {
+      await axios.delete("/api/auth/logout", { withCredentials: true });
+      router.push("/login-student");
+    } catch {
+      router.push("/login-student");
+    }
+  }
 
   return (
     <>
@@ -51,7 +63,9 @@ export default function Navbar() {
           </Link>
         </div>
         <div className="px-6 py-4 mt-10 ml-auto">
-          <BsBoxArrowRight size={24} />
+          <button onClick={logout}>
+            <BsBoxArrowRight size={24} />
+          </button>
         </div>
       </div>
     </>
