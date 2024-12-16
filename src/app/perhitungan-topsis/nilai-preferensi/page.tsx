@@ -57,9 +57,6 @@ export default function Page() {
         auth.setRole(decoded.role);
         auth.setNisn(decoded.nisn);
         auth.setExpire(decoded.exp);
-        if (decoded.role !== "admin") {
-          router.push("/dashboard-mahasiswa");
-        }
       }
     } catch (error) {
       if (error instanceof AxiosError) {
