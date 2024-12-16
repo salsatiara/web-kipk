@@ -12,10 +12,16 @@ export async function GET(request: NextRequest) {
     const sort = searchParams.get("sort") || "terlama";
     const limit = searchParams.get("limit") || "100";
     const page = parseInt(searchParams.get("page") || "1");
+    const search = searchParams.get("search") || "";
 
     const count = await prisma.alternatif.count();
 
     const data = await prisma.alternatif.findMany({
+      where: {
+        nama: {
+          contains: search,
+        },
+      },
       orderBy:
         sort == "terbaru"
           ? { id: "desc" }

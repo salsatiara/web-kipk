@@ -82,6 +82,7 @@ export default function DataCalonPenerima() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [alertIsOpen, setAlertIsOpen] = useState(false);
   const [dataid, setDataId] = useState<number>(0);
+  const [search, setSearch] = useState("");
 
   async function refreshToken() {
     try {
@@ -122,8 +123,8 @@ export default function DataCalonPenerima() {
     setAlertIsOpen(false);
   };
 
-  async function fetchData() {
-    const response = await axios.get<Data>("/api/alternatif");
+  async function fetchData(search: string) {
+    const response = await axios.get<Data>(`/api/alternatif?search=${search}`);
     setData(response.data);
   }
 
@@ -136,15 +137,19 @@ export default function DataCalonPenerima() {
         "Content-Type": "multipart/form-data",
       },
     });
-    fetchData();
+    fetchData(search);
     closeAlert();
     openModal();
   }
 
   useEffect(() => {
     refreshToken();
-    fetchData();
+    fetchData(search);
   }, []);
+
+  useEffect(() => {
+    fetchData(search);
+  }, [search]);
 
   return (
     <>
@@ -233,6 +238,8 @@ export default function DataCalonPenerima() {
                 type="text"
                 placeholder="Search"
                 className="border border-black rounded mx-2 w-32 px-1"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
             </div>
           </div>
