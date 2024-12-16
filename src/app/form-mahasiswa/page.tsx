@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import { AuthContext } from "@/services/storage";
 import axios, { AxiosError } from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useContext, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useState, Suspense } from "react";
 import jwt from "jsonwebtoken";
 
 interface PayloadToken {
@@ -16,7 +16,15 @@ interface PayloadToken {
   exp: number;
 }
 
-export default function Form() {
+export default function FormSuspense() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Form />
+    </Suspense>
+  );
+}
+
+function Form() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const auth = useContext(AuthContext);
