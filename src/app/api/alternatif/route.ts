@@ -36,11 +36,14 @@ export async function GET(request: NextRequest) {
       skip: limit == "seleksi" ? 0 : parseInt(limit) * (page - 1),
     });
 
+    const all = limit == "seleksi" ? await prisma.alternatif.findMany() : [];
+
     return Response.json(
       {
         status: "Success",
         message: "Data found successfully",
         data: data,
+        all: all,
       },
       {
         status: 200,

@@ -26,6 +26,19 @@ type AlternatifType = {
     jarakNegatif: number;
     preferensi: number;
   }[];
+  all: {
+    id: number;
+    nisn: string;
+    nama: string;
+    penghasilan: number;
+    jmlTanggungan: number;
+    nilai: number;
+    rumah: number;
+    listrik: number;
+    jarakPositif: number;
+    jarakNegatif: number;
+    preferensi: number;
+  }[];
 };
 
 interface PayloadToken {
@@ -41,7 +54,8 @@ export default function Home() {
   const router = useRouter();
   const auth = useContext(AuthContext);
 
-  const [mahasiswa, setMahasiswa] = useState<AlternatifType["data"]>([]);
+  const [seleksi, setSeleksi] = useState<AlternatifType["data"]>([]);
+  const [mahasiswa, setMahasiswa] = useState<AlternatifType["all"]>([]);
   const [selamat, setSelamat] = useState("");
   const [pesan, setPesan] = useState("");
 
@@ -78,9 +92,13 @@ export default function Home() {
         "/api/alternatif?sort=tertinggi&limit=seleksi"
       );
 
-      const mahasiswa = response.data.data.filter((item) => {
+      const seleksi = response.data.data.filter((item) => {
         return item.nisn == auth.nisn;
       });
+      const mahasiswa = response.data.all.filter((item) => {
+        return item.nisn == auth.nisn;
+      });
+      setSeleksi(seleksi);
       setMahasiswa(mahasiswa);
     } catch (error) {
       console.error(error);
@@ -96,7 +114,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (mahasiswa.length > 0) {
+    if (seleksi.length > 0) {
       setSelamat("SELAMAT!!");
       setPesan("ANDA DINYATAKAN LULUS DALAM SELEKSI BEASISWA KIP-KULIAH");
     } else {
@@ -105,7 +123,7 @@ export default function Home() {
         "ANDA BELUM DINYATAKAN LULUS DALAM SELEKSI BEASISWA KIP-KULIAH "
       );
     }
-  }, [mahasiswa]);
+  }, [seleksi]);
 
   return (
     <>
@@ -125,7 +143,7 @@ export default function Home() {
               </div>
               <div
                 className={`flex flex-col ${
-                  mahasiswa.length < 1 ? "text-[#EB0707]" : "text-[#1684A7]"
+                  seleksi.length < 1 ? "text-[#EB0707]" : "text-[#1684A7]"
                 } font-bold`}
               >
                 <p className="text-xl">{selamat}</p>
@@ -137,9 +155,11 @@ export default function Home() {
             <p>Nama</p>
             <div className="bg-[#E6E6E6] rounded-lg px-4 py-3">
               <p>
-                {mahasiswa?.length < 1
-                  ? "Anda tidak terdaftar"
-                  : mahasiswa[0].nama}
+                {seleksi?.length > 0
+                  ? seleksi[0].nama
+                  : mahasiswa?.length > 0
+                  ? mahasiswa[0].nama
+                  : "Anda Tidak Terdaftar"}
               </p>
             </div>
             <p className="mt-8">NISN</p>
