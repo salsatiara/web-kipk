@@ -42,7 +42,7 @@ export default function Home() {
         auth.setRole(decoded.role);
         auth.setNisn(decoded.nisn);
         auth.setExpire(decoded.exp);
-        router.push("/dashboard-student");
+        router.push("/dashboard-mahasiswa");
       }
     } catch (error) {
       console.error(error);
