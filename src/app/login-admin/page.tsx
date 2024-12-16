@@ -77,7 +77,7 @@ export default function Home() {
   }, []);
   return (
     <>
-      <div className="flex w-full h-screen min-h-min bg-gray-100 text-black justify-center">
+      <div className="flex w-full bg-gray-100 text-black justify-center">
         <div className="flex flex-col lg:w-1/4 w-full bg-white my-20 mx-4 py-14 px-8 rounded drop-shadow">
           <Image
             src="/image.jpeg"
