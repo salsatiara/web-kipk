@@ -10,8 +10,10 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
 
     const sort = searchParams.get("sort") || "terlama";
-    const limit = parseInt(searchParams.get("limit") || "100");
+    const limit = searchParams.get("limit") || "100";
     const page = parseInt(searchParams.get("page") || "1");
+
+    const count = await prisma.alternatif.count();
 
     const data = await prisma.alternatif.findMany({
       orderBy:
@@ -24,8 +26,8 @@ export async function GET(request: NextRequest) {
           : sort == "terendah"
           ? { preferensi: "asc" }
           : { id: "asc" },
-      take: limit,
-      skip: limit * (page - 1),
+      take: limit == "seleksi" ? count * 0.6 : parseInt(limit),
+      skip: limit == "seleksi" ? 0 : parseInt(limit) * (page - 1),
     });
 
     return Response.json(
