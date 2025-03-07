@@ -45,6 +45,7 @@ export default function Home() {
         router.push("/dashboard-mahasiswa");
       }
     } catch (error) {
+      router.push("/login-student");
       console.error(error);
     }
   }
